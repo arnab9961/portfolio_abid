@@ -7,6 +7,8 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; background: #f7f6f2; color: #20211f; font-family: 'DM Sans', Arial, sans-serif; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button, a { touch-action: manipulation; }
 ::selection { background: #777d68; color: #f7f6f2; }
 .eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .16em; color: rgb(32 33 31 / .52); }
 .link-line { display: inline-flex; align-items: center; gap: 20px; border-bottom: 1px solid rgb(247 246 242 / .3); padding-bottom: 10px; text-transform: uppercase; letter-spacing: .12em; font-size: 10px; transition: border-color .2s, color .2s; }
@@ -18,3 +20,9 @@ body { margin: 0; background: #f7f6f2; color: #20211f; font-family: 'DM Sans', A
 .field input:focus, .field textarea:focus, .field select:focus { border-color: #777d68; box-shadow: 0 0 0 2px rgb(119 125 104 / .12); }
 .field input[type='file'] { padding: .65rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+@media (max-width: 640px) {
+  body { overflow-x: hidden; }
+  .field input, .field textarea, .field select { min-height: 44px; }
+  .field textarea { min-height: 112px; }
+  .link-line { gap: 12px; padding-bottom: 8px; }
+}
