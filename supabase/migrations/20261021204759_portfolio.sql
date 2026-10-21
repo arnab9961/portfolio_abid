@@ -12,6 +12,7 @@ create table if not exists public.artist_profile (
   email text not null default '',
   phone text not null default '',
   whatsapp text not null default '',
+  facebook text,
   updated_at timestamptz not null default now(),
   constraint artist_profile_singleton check (id = '00000000-0000-0000-0000-000000000001')
 );

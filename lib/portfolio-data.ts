@@ -44,6 +44,7 @@ export type ArtistProfile = {
   email: string
   phone: string
   whatsapp: string
+  facebook: string
 }
 
 export const artist: ArtistProfile = {
@@ -59,6 +60,7 @@ export const artist: ArtistProfile = {
   email: '',
   phone: '',
   whatsapp: '',
+  facebook: '',
 }
 
 export const artworks: Artwork[] = []
