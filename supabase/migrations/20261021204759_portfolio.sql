@@ -5,6 +5,7 @@ create table if not exists public.artist_profile (
   name text not null default 'Abid Hossain',
   discipline text not null default '3D Landscape Artist',
   portrait text not null default '/artist-portrait.jpg',
+  hero_image text,
   bio_en text not null default '',
   bio_bn text not null default '',
   bio_ja text not null default '',

@@ -39,6 +39,7 @@ export type ArtistProfile = {
   name: string
   discipline: string
   portrait: string
+  heroImage: string
   bio: Record<Language, string>
   email: string
   phone: string
@@ -49,6 +50,7 @@ export const artist: ArtistProfile = {
   name: 'Abid Hossain',
   discipline: '3D Landscape Artist',
   portrait: '/artist-portrait.jpg',
+  heroImage: '',
   bio: {
     en: 'Biography placeholder — add the artist’s story, practice, and background here.',
     bn: 'জীবনী প্লেসহোল্ডার — শিল্পীর গল্প, শিল্পচর্চা এবং পরিচয় এখানে যোগ করুন।',
