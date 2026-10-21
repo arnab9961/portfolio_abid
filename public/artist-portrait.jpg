@@ -1,0 +1,216 @@
+Update the 3D landscape artist portfolio website with the following specific requirements.
+
+## Artist Information
+
+Artist name: Abid Hossain
+
+Profession: 3D Landscape Artist
+
+Create a sophisticated, minimalist, premium portfolio that showcases his 3D landscape artwork. The website should feel like a high-end digital art gallery with elegant typography, beautiful imagery, generous whitespace, and subtle animations.
+
+## 1. Multilingual Support — English, Bangla, Japanese
+
+The website must support three languages:
+
+- English (EN)
+- বাংলা (BN)
+- 日本語 (JA)
+
+**Default language: English.**
+
+Add a clean, elegant language switcher in the top navigation, preferably a compact dropdown or segmented selector.
+
+Requirements:
+- English must be selected on the first visit by default.
+- Users can switch between English, Bangla, and Japanese.
+- All interface text must change when the language changes, including navigation, headings, descriptions, buttons, category labels, contact section, footer, and artwork-related UI.
+- Implement actual translations, not just language labels.
+- Use natural, professional translations for all three languages.
+- Keep the selected language while navigating between the homepage and admin dashboard.
+- Use a simple, maintainable translation dictionary with separate English, Bangla, and Japanese translation objects.
+- Avoid translating the artist's name, artwork titles, and original artwork descriptions automatically. Preserve original content unless a translated version is explicitly provided.
+- For Japanese, use an appropriate Japanese font fallback.
+- Ensure Bangla text renders correctly using a suitable Bengali font, such as Noto Sans Bengali.
+- Use locale-aware typography and spacing without breaking the design.
+
+The language switcher should look like a natural part of the website, not a large or distracting control.
+
+## 2. Artist Profile and Photo
+
+Display the artist's name as:
+
+Abid Hossain
+
+Use the professional title:
+
+3D Landscape Artist
+
+I have provided the artist's photograph as an uploaded reference image. Use that provided photograph for the artist portrait if it is available to the project. Do not replace it with a random person or generate a different identity.
+
+Place a small, elegant artist portrait in the About section or near the hero introduction. Keep the landscape artwork as the primary visual focus.
+
+If the provided portrait is not accessible during generation, use a clearly replaceable placeholder and make the portrait image source configurable from the artist profile data.
+
+Do not invent personal biography, achievements, awards, qualifications, or work history. Use editable placeholder text until I add the actual information.
+
+## 3. Public Portfolio — One Page
+
+Keep the public portfolio as a single, scrollable homepage at `/`.
+
+Include these sections:
+
+1. Minimal navigation with artist name, Selected Works, About, Contact, and language switcher.
+2. Hero section with a cinematic 3D landscape artwork and the headline "Imagining Landscapes Beyond Reality."
+3. Selected Works gallery with category filters.
+4. About the Artist section with Abid Hossain's portrait and editable biography.
+5. Creative Approach section.
+6. Contact section with email, phone, and WhatsApp actions.
+7. Minimal footer.
+
+Use a warm off-white background, charcoal typography, muted olive accents, and elegant editorial serif headings.
+
+Make the website visually impressive, responsive, and polished on desktop and mobile.
+
+## 4. Artwork Gallery and Empty State
+
+I will add the actual artwork images and descriptions later through the admin dashboard.
+
+Therefore, create a gallery that works with an initially empty artwork dataset.
+
+When there are no uploaded artworks, display an elegant empty state, such as:
+
+"New landscapes are coming soon."
+
+Translate this message into Bangla and Japanese.
+
+Do not permanently hardcode sample artworks into the public gallery. If sample data is used during development, clearly separate it from real artwork data and make it easy to remove.
+
+Each real artwork should support:
+- Image
+- Artwork title
+- Category
+- Original description
+- Optional year
+- Optional featured status
+- Optional translations of the title and description for Bangla and Japanese
+
+Show only actual published artworks on the public website.
+
+The category filters must be generated from available artwork categories. Selecting a category should filter the gallery correctly.
+
+Clicking an artwork should open an elegant lightbox with the full image, title, description, category, and previous/next navigation where practical.
+
+## 5. Admin Dashboard — /admin
+
+Create a separate admin dashboard at `/admin`.
+
+This dashboard is intended for me to manage the portfolio in the future. I need to be able to add artwork images and descriptions myself.
+
+Create a practical artwork management interface with:
+
+### Add Artwork
+- Upload an image using a file input.
+- Preview the selected image before saving.
+- Enter artwork title.
+- Select or create a category.
+- Write an artwork description.
+- Optionally enter the year.
+- Mark an artwork as featured.
+- Add optional Bangla and Japanese translations of the title and description.
+- Set publication status to Draft or Published.
+
+### Manage Artwork
+- View uploaded artwork records.
+- Edit existing artwork details.
+- Replace artwork images.
+- Delete artwork after confirmation.
+- Publish or unpublish artwork.
+- Preview the artwork before publishing.
+- Search and filter artwork by title, category, and status.
+
+### Manage Artist Profile
+Provide editable fields for:
+- Artist name: Abid Hossain
+- Artist portrait
+- Biography in English
+- Biography in Bangla
+- Biography in Japanese
+- Email address
+- Phone number
+- WhatsApp number
+
+### Admin Experience
+
+Keep the admin interface clean, professional, and easy to use.
+
+Provide form validation, helpful error messages, upload previews, confirmation dialogs, and clear save/cancel actions.
+
+Separate the admin interface from the public navigation.
+
+Do not expose administrative editing controls on the public homepage.
+
+## 6. Backend-Ready Architecture
+
+I will implement the backend myself later.
+
+For now:
+- Build the entire frontend using Next.js App Router, React, TypeScript, and Tailwind CSS.
+- Use reusable components and centralized data models.
+- Create a clean data-access layer or repository abstraction for artwork and artist profile data.
+- Use mock data or local state only where necessary for the prototype.
+- Make the frontend easy to connect to my future API.
+- Clearly distinguish temporary local previews from permanently stored images.
+- Do not claim that uploaded images or edited records are permanently saved unless persistent storage actually exists.
+- Keep the data model ready for database records and image-storage URLs.
+- Include fields for original text and optional English, Bangla, and Japanese translations.
+
+Important: browser local state alone is not permanent storage. If you choose localStorage for a frontend-only prototype, explain its limitations and keep the storage logic isolated so it can be replaced with API calls later.
+
+Do not add a database or external storage service at this stage.
+
+## 7. Contact Actions
+
+Provide configurable contact details in the artist profile.
+
+Include:
+- Email Me
+- Call Me
+- WhatsApp
+
+Use correct `mailto:`, `tel:`, and `https://wa.me/` links.
+
+Do not invent real email addresses or phone numbers. If contact details have not been entered, hide or disable the corresponding action rather than showing a fake contact link.
+
+Translate button labels into all three supported languages.
+
+## 8. Technical and Design Requirements
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- shadcn/ui where appropriate
+- Lucide icons
+- Responsive desktop, tablet, and mobile layouts
+- Accessible controls and keyboard navigation
+- Reduced-motion support
+- Correct image aspect ratios
+- Optimized image rendering
+- Functional language switching
+- Functional gallery filters and lightbox
+- Functional frontend admin forms and CRUD interactions
+
+Keep the public homepage as a single page and the admin dashboard at `/admin`.
+
+Do not create unnecessary extra public pages.
+
+## Final Goal
+
+Build a refined multilingual portfolio for Abid Hossain that feels like a bespoke digital art gallery.
+
+English must be the default language, with Bangla and Japanese available through the language switcher.
+
+Use the provided artist photograph if accessible. Allow me to add actual artwork images, titles, categories, descriptions, and translations later through the admin dashboard.
+
+Prioritize elegant visual design, simplicity, accurate multilingual behavior, and an architecture that will make future backend integration straightforward.
+
+Build the complete working frontend rather than just a static wireframe.
