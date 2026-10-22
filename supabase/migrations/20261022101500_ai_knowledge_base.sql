@@ -23,7 +23,7 @@ create table if not exists public.knowledge_chunks (
   category text not null,
   language text not null check (language in ('en', 'bn', 'ja')),
   content text not null,
-  embedding vector(1536),
+  embedding vector(768),
   search_vector tsvector generated always as (
     to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(category, '') || ' ' || coalesce(content, ''))
   ) stored,
@@ -62,7 +62,7 @@ create policy "admins manage knowledge chunks"
   with check ((select auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 create or replace function public.match_knowledge_chunks(
-  query_embedding vector(1536),
+  query_embedding vector(768),
   match_language text,
   match_count integer default 6
 )
@@ -90,4 +90,4 @@ as $$
   limit greatest(1, least(match_count, 12));
 $$;
 
-grant execute on function public.match_knowledge_chunks(vector(1536), text, integer) to anon, authenticated;
+grant execute on function public.match_knowledge_chunks(vector(768), text, integer) to anon, authenticated;

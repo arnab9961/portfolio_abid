@@ -1,4 +1,4 @@
-const DIMENSIONS = 1536
+const DIMENSIONS = 768
 
 export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' | 'RETRIEVAL_DOCUMENT' = 'RETRIEVAL_DOCUMENT'): Promise<number[] | null> {
   const geminiKey = process.env.GEMINI_API_KEY
