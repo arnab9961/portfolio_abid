@@ -20,7 +20,6 @@ button, a { touch-action: manipulation; }
 .link-line svg { width: 15px; height: 15px; }
 .link-line:hover { border-color: #777d68; color: #aeb49a; }
 .font-serif em { font-style: italic; font-weight: 400; }
-.font-signature { font-family: 'Brush Script MT', 'Segoe Script', 'URW Chancery L', cursive; font-style: italic; font-weight: 500; letter-spacing: -.04em; }
 .field { display: flex; flex-direction: column; gap: .55rem; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; color: rgb(32 33 31 / .58); }
 .field input, .field textarea, .field select { width: 100%; border: 1px solid rgb(32 33 31 / .14); background: #f7f6f2; padding: .8rem .85rem; color: #20211f; font: 14px 'DM Sans', Arial, sans-serif; letter-spacing: 0; text-transform: none; outline: none; }
 .field input:focus, .field textarea:focus, .field select:focus { border-color: #777d68; box-shadow: 0 0 0 2px rgb(119 125 104 / .12); }
