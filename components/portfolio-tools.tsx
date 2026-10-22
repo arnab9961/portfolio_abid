@@ -53,11 +53,29 @@ export function MusicPlayer() {
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
   const [volume, setVolume] = useState(0.7)
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
   const [error, setError] = useState('')
   useEffect(() => { let active = true; createClient().from('music_settings').select('track_title,audio_url,attribution').eq('enabled', true).maybeSingle().then(({ data, error: queryError }) => { if (!active) return; if (queryError && queryError.code !== 'PGRST205') setError('Music is unavailable.'); else if (data?.audio_url) setSettings(data) }); return () => { active = false } }, [])
   useEffect(() => () => { audio?.pause() }, [audio])
   useEffect(() => { if (audio) audio.volume = volume }, [audio, volume])
+  useEffect(() => {
+    if (!settings || audio || playing) return
+    const startAfterInteraction = () => {
+      const element = new Audio(settings.audio_url)
+      element.preload = 'metadata'
+      element.volume = volume
+      element.onended = () => setPlaying(false)
+      element.onerror = () => { setError('This track could not be played.'); setPlaying(false) }
+      setAudio(element)
+      element.play().then(() => setPlaying(true)).catch(() => setError('Press play to start the track.'))
+    }
+    document.addEventListener('pointerdown', startAfterInteraction, { once: true })
+    document.addEventListener('keydown', startAfterInteraction, { once: true })
+    return () => {
+      document.removeEventListener('pointerdown', startAfterInteraction)
+      document.removeEventListener('keydown', startAfterInteraction)
+    }
+  }, [audio, playing, settings, volume])
   if (!settings) return null
   function togglePlay() {
     if (!settings) return
