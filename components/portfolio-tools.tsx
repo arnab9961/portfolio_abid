@@ -60,20 +60,28 @@ export function MusicPlayer() {
   useEffect(() => { if (audio) audio.volume = volume }, [audio, volume])
   useEffect(() => {
     if (!settings || audio || playing) return
-    const startAfterInteraction = () => {
+    let started = false
+    const startPlayback = () => {
+      if (started) return
+      started = true
       const element = new Audio(settings.audio_url)
       element.preload = 'metadata'
       element.volume = volume
       element.onended = () => setPlaying(false)
       element.onerror = () => { setError('This track could not be played.'); setPlaying(false) }
       setAudio(element)
-      element.play().then(() => setPlaying(true)).catch(() => setError('Press play to start the track.'))
+      element.play().then(() => { setError(''); setPlaying(true) }).catch(() => {
+        started = false
+        setAudio(null)
+        setError('Music will start after your first page interaction.')
+      })
     }
-    document.addEventListener('pointerdown', startAfterInteraction, { once: true })
-    document.addEventListener('keydown', startAfterInteraction, { once: true })
+    startPlayback()
+    document.addEventListener('pointerdown', startPlayback, { once: true })
+    document.addEventListener('keydown', startPlayback, { once: true })
     return () => {
-      document.removeEventListener('pointerdown', startAfterInteraction)
-      document.removeEventListener('keydown', startAfterInteraction)
+      document.removeEventListener('pointerdown', startPlayback)
+      document.removeEventListener('keydown', startPlayback)
     }
   }, [audio, playing, settings, volume])
   if (!settings) return null
