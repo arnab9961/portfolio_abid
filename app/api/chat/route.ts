@@ -33,14 +33,15 @@ export async function POST(request: Request) {
     }
     if (vector) {
       const { data, error } = await supabase.rpc('match_knowledge_chunks', { query_embedding: vector, match_language: '', match_count: 8 })
-      if (error) throw new Error(error.message)
-      retrieved = data || []
-    } else {
+      if (!error) retrieved = data || []
+      else console.error('Vector retrieval failed; using keyword retrieval', error.message)
+    }
+    if (!retrieved.length) {
       const searchTerms = question.replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter((word: string) => word.length > 1).slice(0, 8).join(' | ')
       if (searchTerms) {
         const { data, error } = await supabase.from('knowledge_chunks').select('id,entry_id,title,category,language,content').textSearch('search_vector', searchTerms, { type: 'websearch', config: 'simple' }).limit(8)
-        if (error) throw new Error(error.message)
-        retrieved = data || []
+        if (error) console.error('Keyword retrieval failed; continuing without knowledge chunks', error.message)
+        else retrieved = data || []
       }
     }
     const [profile, artworks, activities] = await Promise.all([
