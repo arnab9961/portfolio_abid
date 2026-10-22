@@ -11,7 +11,8 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
       body: JSON.stringify({
         model: `models/${model}`,
         content: { parts: [{ text }] },
-        embedContentConfig: { taskType, output_dimensionality: DIMENSIONS },
+        taskType,
+        outputDimensionality: DIMENSIONS,
       }),
     })
     if (!response.ok) throw new Error(`Gemini embedding provider returned ${response.status}.`)
