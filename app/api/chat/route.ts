@@ -36,12 +36,13 @@ export async function POST(request: Request) {
       if (!error) retrieved = data || []
       else console.error('Vector retrieval failed; using keyword retrieval', error.message)
     }
-    if (!retrieved.length) {
-      const searchTerms = question.replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter((word: string) => word.length > 1).slice(0, 8).join(' | ')
-      if (searchTerms) {
-        const { data, error } = await supabase.from('knowledge_chunks').select('id,entry_id,title,category,language,content').textSearch('search_vector', searchTerms, { type: 'websearch', config: 'simple' }).limit(8)
-        if (error) console.error('Keyword retrieval failed; continuing without knowledge chunks', error.message)
-        else retrieved = data || []
+    const searchTerms = question.replace(/[^\p{L}\p{N}\s]/gu, ' ').trim().split(/\s+/).filter((word: string) => word.length > 1).slice(0, 8).join(' | ')
+    if (searchTerms) {
+      const { data, error } = await supabase.from('knowledge_chunks').select('id,entry_id,title,category,language,content').textSearch('search_vector', searchTerms, { type: 'websearch', config: 'simple' }).limit(8)
+      if (error) console.error('Keyword retrieval failed; continuing with vector results', error.message)
+      else {
+        const existing = new Set(retrieved.map(chunk => String(chunk.id)))
+        retrieved = [...retrieved, ...(data || []).filter(chunk => !existing.has(String(chunk.id)))].slice(0, 10)
       }
     }
     const [profile, artworks, activities] = await Promise.all([
