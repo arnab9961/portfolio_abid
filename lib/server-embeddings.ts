@@ -16,7 +16,10 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
     })
     if (!response.ok) throw new Error(`Gemini embedding provider returned ${response.status}.`)
     const vector = (await response.json())?.embedding?.values
-    if (!Array.isArray(vector) || vector.length !== DIMENSIONS) throw new Error(`Gemini embedding model must return ${DIMENSIONS} dimensions.`)
+    if (!Array.isArray(vector) || vector.length !== DIMENSIONS) {
+      const actualDimensions = Array.isArray(vector) ? vector.length : 0
+      throw new Error(`Gemini embedding model returned ${actualDimensions} dimensions; use GEMINI_EMBEDDING_MODEL=gemini-embedding-001, which supports ${DIMENSIONS} dimensions.`)
+    }
     return vector
   }
 
