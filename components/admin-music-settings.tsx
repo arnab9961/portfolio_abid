@@ -12,7 +12,7 @@ export function AdminMusicSettings({ onSaved }: { onSaved: (message: string) => 
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
-  useEffect(() => { supabase.from('music_settings').select('*').maybeSingle().then(({ data, error: queryError }) => { if (queryError) setError(queryError.message); if (data) setSettings({ enabled: data.enabled, track_title: data.track_title, audio_url: data.audio_url, attribution: data.attribution || '', license: data.license || '' }); setLoading(false) }) }, [])
+  useEffect(() => { supabase.from('music_settings').select('*').maybeSingle().then(({ data, error: queryError }) => { if (queryError) setError(queryError.code === 'PGRST205' ? 'Music settings are not installed in this Supabase project. Apply migration 20261022090000_chatbot_music.sql, then reload the schema cache.' : queryError.message); if (data) setSettings({ enabled: data.enabled, track_title: data.track_title, audio_url: data.audio_url, attribution: data.attribution || '', license: data.license || '' }); setLoading(false) }) }, [])
   function update(key: keyof Settings, value: string | boolean) { setSettings(current => ({ ...current, [key]: value })) }
   async function save(event: FormEvent) {
     event.preventDefault(); setSaving(true); setError('')

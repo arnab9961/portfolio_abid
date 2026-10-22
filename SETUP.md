@@ -12,6 +12,8 @@ RLS keeps drafts and all writes private to users whose verified JWT has the `adm
 
 Apply `supabase/migrations/20261022090000_chatbot_music.sql` after the portfolio migrations. It adds the protected `inquiries` table, the singleton `music_settings` row, and the public `music` storage bucket. The inquiry insert policy permits anonymous submissions while reads remain admin-only.
 
+If the app reports `Could not find the table 'public.music_settings' in the schema cache`, open Supabase **SQL Editor**, paste and run the complete `20261022090000_chatbot_music.sql` migration, then wait a few seconds and reload the app. If the error remains, open **Project Settings → API → Reload schema cache** (or restart the project API). The migration must be applied to the same Supabase project whose URL is in `NEXT_PUBLIC_SUPABASE_URL`.
+
 Add `GROQ_API_KEY` and `GROQ_MODEL` only as server-side Vercel environment variables. Choose a currently available Groq GPT-OSS model from the Groq model catalog; do not add either variable with a `NEXT_PUBLIC_` prefix. The chatbot reads only published profile, artwork, and activity rows.
 
 In the admin dashboard's Music tab, upload an audio file you own or have permission to use, record its attribution and license, preview it, and enable the player. The player is hidden until a published enabled setting has both a title/audio URL and a successful database read. Music is never autoplayed.

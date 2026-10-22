@@ -47,7 +47,7 @@ export function MusicPlayer() {
   const [volume, setVolume] = useState(0.7)
   const [expanded, setExpanded] = useState(true)
   const [error, setError] = useState('')
-  useEffect(() => { let active = true; createClient().from('music_settings').select('track_title,audio_url,attribution').eq('enabled', true).maybeSingle().then(({ data, error: queryError }) => { if (!active) return; if (queryError) setError('Music is unavailable.'); else if (data?.audio_url) setSettings(data) }); return () => { active = false } }, [])
+  useEffect(() => { let active = true; createClient().from('music_settings').select('track_title,audio_url,attribution').eq('enabled', true).maybeSingle().then(({ data, error: queryError }) => { if (!active) return; if (queryError && queryError.code !== 'PGRST205') setError('Music is unavailable.'); else if (data?.audio_url) setSettings(data) }); return () => { active = false } }, [])
   useEffect(() => () => { audio?.pause() }, [audio])
   useEffect(() => { if (audio) audio.volume = volume }, [audio, volume])
   if (!settings) return null
