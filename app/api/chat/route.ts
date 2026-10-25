@@ -21,7 +21,11 @@ async function requestGroq(apiKey: string, model: string, body: Record<string, u
     })
     lastResponse = response
     if (response.ok || (response.status !== 429 && response.status < 500)) return response
-    if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 400 * (attempt + 1)))
+    if (attempt < 2) {
+      const retryAfter = Number(response.headers.get('retry-after'))
+      const delay = Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter * 1000 : 1500 * (attempt + 1)
+      await new Promise(resolve => setTimeout(resolve, Math.min(delay, 8000)))
+    }
   }
   if (!lastResponse) throw new Error('Groq request did not return a response.')
   return lastResponse
