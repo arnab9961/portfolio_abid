@@ -71,7 +71,9 @@ export async function POST(request: Request) {
       supabase.from('artworks').select('title,title_bn,title_ja,category,year,description,description_bn,description_ja').eq('status', 'published').limit(12),
       supabase.from('activities').select('title,title_bn,title_ja,type,date,location,description,description_bn,description_ja').eq('status', 'published').limit(12),
     ])
-    if (profile.error || artworks.error || activities.error) throw new Error('Unable to load published portfolio data.')
+    if (profile.error) console.error('Profile fallback retrieval failed', profile.error.message)
+    if (artworks.error) console.error('Artwork fallback retrieval failed', artworks.error.message)
+    if (activities.error) console.error('Activity fallback retrieval failed', activities.error.message)
     const context = JSON.stringify({ knowledge_chunks: retrieved, portfolio_fallback: { profile: profile.data, artworks: artworks.data, activities: activities.data } })
     const groqResponse = await requestGroq(apiKey, model, {
         model, temperature: 0.25, max_tokens: 160,
