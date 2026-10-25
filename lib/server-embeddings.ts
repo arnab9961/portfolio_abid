@@ -1,6 +1,28 @@
-const DIMENSIONS = 768
+const DIMENSIONS = 1024
 
 export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' | 'RETRIEVAL_DOCUMENT' = 'RETRIEVAL_DOCUMENT'): Promise<number[] | null> {
+  const voyageKey = process.env.VOYAGE_API_KEY
+  if (voyageKey) {
+    const model = process.env.VOYAGE_EMBEDDING_MODEL || 'voyage-4'
+    const response = await fetch('https://api.voyageai.com/v1/embeddings', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${voyageKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: [text],
+        model,
+        input_type: taskType === 'RETRIEVAL_QUERY' ? 'query' : 'document',
+        output_dimension: DIMENSIONS,
+      }),
+    })
+    if (!response.ok) throw new Error(`Voyage embedding provider returned ${response.status}.`)
+    const vector = (await response.json())?.data?.[0]?.embedding
+    if (!Array.isArray(vector) || vector.length !== DIMENSIONS) {
+      const actualDimensions = Array.isArray(vector) ? vector.length : 0
+      throw new Error(`Voyage embedding model returned ${actualDimensions} dimensions; use a model that supports ${DIMENSIONS} dimensions.`)
+    }
+    return vector
+  }
+
   const geminiKey = process.env.GEMINI_API_KEY
   if (geminiKey) {
     const model = process.env.GEMINI_EMBEDDING_MODEL || 'gemini-embedding-001'
@@ -19,7 +41,7 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
     const vector = (await response.json())?.embedding?.values
     if (!Array.isArray(vector) || vector.length !== DIMENSIONS) {
       const actualDimensions = Array.isArray(vector) ? vector.length : 0
-      throw new Error(`Gemini embedding model returned ${actualDimensions} dimensions; use GEMINI_EMBEDDING_MODEL=gemini-embedding-001, which supports ${DIMENSIONS} dimensions.`)
+      throw new Error(`Gemini embedding model returned ${actualDimensions} dimensions; configure a model that supports ${DIMENSIONS} dimensions.`)
     }
     return vector
   }

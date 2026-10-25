@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     const { error: insertError } = await supabase.from('knowledge_chunks').insert(rows)
     if (insertError) throw new Error(insertError.message)
     await supabase.from('knowledge_entries').update({ indexing_status: 'indexed', indexing_error: null, updated_at: new Date().toISOString() }).eq('id', entry.id)
-    return NextResponse.json({ status: 'indexed', chunks: rows.length, embeddings: Boolean(process.env.GEMINI_API_KEY || (process.env.EMBEDDING_API_KEY && process.env.EMBEDDING_MODEL)) })
+    return NextResponse.json({ status: 'indexed', chunks: rows.length, embeddings: Boolean(process.env.VOYAGE_API_KEY || process.env.GEMINI_API_KEY || (process.env.EMBEDDING_API_KEY && process.env.EMBEDDING_MODEL)) })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Indexing failed.'
     await supabase.from('knowledge_entries').update({ indexing_status: 'failed', indexing_error: message }).eq('id', entry.id)

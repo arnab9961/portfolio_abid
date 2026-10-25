@@ -26,16 +26,25 @@ Apply `supabase/migrations/20261022101500_ai_knowledge_base.sql` after the exist
 
 The admin dashboard now includes a simplified **AI knowledge base**. Add information by typing/pasting it into the text area or uploading a `.txt`, `.md`, or `.json` document. Give it a title, choose its language, and publish it when ready. Existing entries can be edited or deleted. Published content is split into sentence-aware overlapping chunks and indexed immediately; drafts are never searchable.
 
-Keyword retrieval works without extra credentials. Gemini embeddings are supported directly. Add your Gemini key server-side:
+Keyword retrieval works without extra credentials. Voyage-4 embeddings are supported directly and are used when `VOYAGE_API_KEY` is configured. Add your Voyage key server-side:
+
+```env
+VOYAGE_API_KEY=your-voyage-key
+VOYAGE_EMBEDDING_MODEL=voyage-4
+```
+
+Voyage-4 uses 1024-dimensional vectors with separate query/document input types. Keep `VOYAGE_API_KEY` server-side; never prefix it with `NEXT_PUBLIC_`.
+
+Gemini embeddings remain supported as a fallback when Voyage is not configured:
 
 ```env
 GEMINI_API_KEY=your-gemini-key
 GEMINI_EMBEDDING_MODEL=gemini-embedding-001
 ```
 
-`gemini-embedding-001` is requested at 768 dimensions to reduce vector storage while retaining semantic retrieval. Keep `GEMINI_API_KEY` server-side; never prefix it with `NEXT_PUBLIC_`. The chat route retrieves up to eight published chunks, preferring Gemini vector similarity when configured and falling back to PostgreSQL full-text search. It does not send the entire knowledge base to Groq. The admin-only **Test AI Chatbot** panel shows the generated answer, selected retrieval method, context sufficiency, and retrieved chunks/scores.
+`gemini-embedding-001` is requested at 1024 dimensions so it remains compatible with the Voyage vector schema. Keep `GEMINI_API_KEY` server-side; never prefix it with `NEXT_PUBLIC_`. The chat route retrieves up to eight published chunks, preferring Voyage vector similarity, then Gemini vector similarity, and finally PostgreSQL full-text search. It does not send the entire knowledge base to Groq. The admin-only **Test AI Chatbot** panel shows the generated answer, selected retrieval method, context sufficiency, and retrieved chunks/scores.
 
-If the original 1536-dimension AI migration has already been applied, also apply `supabase/migrations/20261022104500_resize_knowledge_embeddings.sql`. It recreates the embedding column at 768 dimensions and clears old vectors; reindex published knowledge entries from the admin dashboard afterward.
+Apply `supabase/migrations/20261025120000_resize_knowledge_embeddings_voyage.sql` after the existing AI knowledge-base migrations. It recreates the embedding column at 1024 dimensions and clears old vectors; reindex published knowledge entries from the admin dashboard afterward. If the original 1536-dimension migration was already applied, the earlier resize migration may be applied first, followed by this migration.
 
 The previous generic OpenAI-compatible configuration remains supported as a fallback:
 
