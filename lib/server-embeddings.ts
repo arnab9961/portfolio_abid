@@ -6,6 +6,7 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
     const model = process.env.VOYAGE_EMBEDDING_MODEL || 'voyage-4'
     const response = await fetch('https://api.voyageai.com/v1/embeddings', {
       method: 'POST',
+      signal: AbortSignal.timeout(15000),
       headers: { Authorization: `Bearer ${voyageKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         input: [text],
@@ -29,6 +30,7 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:embedContent?key=${encodeURIComponent(geminiKey)}`
     const response = await fetch(endpoint, {
       method: 'POST',
+      signal: AbortSignal.timeout(15000),
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: `models/${model}`,
@@ -51,6 +53,7 @@ export async function createEmbedding(text: string, taskType: 'RETRIEVAL_QUERY' 
   if (!key || !model) return null
   const response = await fetch(process.env.EMBEDDING_API_URL || 'https://api.openai.com/v1/embeddings', {
     method: 'POST',
+    signal: AbortSignal.timeout(15000),
     headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ model, input: text }),
   })
